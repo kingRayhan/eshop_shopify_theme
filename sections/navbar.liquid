@@ -1,12 +1,4 @@
-<style>
-    .header.shop .topbar {
-        background-color: {{ section.settings.topbar-bg }} !important;
-        color: {{ section.settings.topbar-text-color }} !important;
-    }
-</style>
-
 <header class="header shop section-id-{{ section.id }}">
-
     {%if section.settings.show-topbar %}
     <div class="topbar" id="theme-topbar">
         <div class="container">
@@ -15,8 +7,13 @@
                     <!-- Top Left -->
                     <div class="top-left">
                         <ul class="list-main">
-                            <li><i class="ti-headphone-alt"></i> +060 (800) 801-582</li>
-                            <li><i class="ti-email"></i> support@shophub.com</li>
+                            {% if section.settings.topbar-phonenumber != blank %}
+                            <li><i class="ti-headphone-alt"></i> {{ section.settings.topbar-phonenumber }}</li>
+                            {% endif %}
+                            
+                            {% if section.settings.topbar-email != blank %}
+                            <li><i class="ti-email"></i> {{ section.settings.topbar-email }}</li>
+                            {% endif %}
                         </ul>
                     </div>
                     <!--/ End Top Left -->
@@ -25,8 +22,11 @@
                     <!-- Top Right -->
                     <div class="right-content">
                         <ul class="list-main">
-                            <li><i class="ti-location-pin"></i> Store location</li>
-                            <li><i class="ti-alarm-clock"></i> <a href="#">Daily deal</a></li>
+                            
+                            {% if section.settings.topbar-location != blank %}
+                                <li><i class="ti-location-pin"></i> {{ section.settings.topbar-location }}</li>
+                            {% endif %}
+
                             <li><i class="ti-user"></i> <a href="#">My account</a></li>
                             <li><i class="ti-power-off"></i><a href="login.html#">Login</a></li>
                         </ul>
@@ -66,6 +66,8 @@
                         <!--/ End Search Form -->
                     </div>
                     <!--/ End Search Form -->
+
+
                     <div class="mobile-nav">
                         <div class="slicknav_menu"><a href="#" aria-haspopup="true" role="button" tabindex="0"
                                 class="slicknav_btn slicknav_collapsed" style="outline: none;"><span
@@ -105,6 +107,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="col-lg-8 col-md-7 col-12">
                     <div class="search-bar-top">
                         <div class="search-bar">
@@ -139,8 +142,13 @@
                             <a href="#" class="single-icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
                         </div>
                         <div class="sinlge-bar shopping">
-                            <a href="#" class="single-icon"><i class="ti-bag"></i> <span
-                                    class="total-count">2</span></a>
+
+                            <a href="#" class="single-icon">
+                                <i class="ti-bag"></i> 
+                                <span class="total-count">2</span>
+                            </a>
+
+                            
                             <!-- Shopping Item -->
                             <div class="shopping-item">
                                 <div class="dropdown-cart-header">
@@ -181,16 +189,17 @@
         </div>
     </div>
 
-
-
-    <!-- Header Inner -->
+        <!-- Header Inner -->
 		<div class="header-inner">
 			<div class="container">
 				<div class="cat-nav-head">
 					<div class="row">
-						<div class="col-lg-3">
+						
+                        {% if section.settings.show-collections %}
+                        <!-- Collection Menu -->
+                        <div class="col-lg-3">
 							<div class="all-category">
-								<h3 class="cat-heading"><i class="fa fa-bars" aria-hidden="true"></i>CATEGORIES</h3>
+								<h3 class="cat-heading"><i class="fa fa-bars" aria-hidden="true"></i>{{ section.settings.collections-label }}</h3>
 								<ul class="main-category">
 									<li><a href="#">New Arrivals <i class="fa fa-angle-right" aria-hidden="true"></i></a>
 										<ul class="sub-category">
@@ -256,6 +265,9 @@
 								</ul>
 							</div>
 						</div>
+                        <!-- ./Collection Menu -->
+                        {% endif %}
+
 						<div class="col-lg-9 col-12">
 							<div class="menu-area">
 								<!-- Main Menu -->
@@ -263,22 +275,24 @@
 									<div class="navbar-collapse">	
 										<div class="nav-inner">	
 											<ul class="nav main-menu menu navbar-nav">
-													<li class="active"><a href="#">Home</a></li>
-													<li><a href="#">Product</a></li>												
-													<li><a href="#">Service</a></li>
-													<li><a href="#">Shop<i class="ti-angle-down"></i><span class="new">New</span></a>
-														<ul class="dropdown">
-															<li><a href="cart.html">Cart</a></li>
-															<li><a href="checkout.html">Checkout</a></li>
-														</ul>
-													</li>
-													<li><a href="#">Pages</a></li>									
-													<li><a href="#">Blog<i class="ti-angle-down"></i></a>
-														<ul class="dropdown">
-															<li><a href="blog-single-sidebar.html">Blog Single Sidebar</a></li>
-														</ul>
-													</li>
-													<li><a href="contact.html">Contact Us</a></li>
+													{% for link in linklists.main-menu.links %}
+                                                        <li class="{% if link.current %}active{% endif %}">
+                                                            <a href="{{ link.url }}">
+                                                                {{ link.title }}
+
+                                                                {% if link.links != blank %}
+                                                                    <i class="ti-angle-down"></i>
+                                                                {% endif %}
+                                                            </a>
+                                                            {% if link.links != blank %}
+                                                                <ul class="dropdown">
+                                                                    {% for childLink in link.links %}
+                                                                        <li><a href="{{ childLink.url }}">{{ childLink.title }}</a></li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            {% endif %}
+                                                        </li>
+                                                    {% endfor %}
 												</ul>
 										</div>
 									</div>
@@ -315,16 +329,38 @@
             "default": true
         },
         {
-            "type": "color",
-            "id": "topbar-bg",
-            "label": "background Color",
-            "default": "#FFF"
+            "type": "text",
+            "id": "topbar-phonenumber",
+            "label": "Phone number",
+            "default": "+880xxxxxxxxxx"
         },
         {
-            "type": "color",
-            "id": "topbar-text-color",
-            "label": "Text Color",
-            "default": "#333"
+            "type": "text",
+            "id": "topbar-email",
+            "label": "Email",
+            "default": "example@example.com"
+        },
+        {
+            "type": "text",
+            "id": "topbar-location",
+            "label": "Location",
+            "default": "The Internet"
+        },
+        {
+            "type": "header",
+            "content": "Navigation Menu"
+        },
+        {
+            "type": "checkbox",
+            "id": "show-collections",
+            "label": "Show Collections",
+            "default": true
+        },
+        {
+            "type": "text",
+            "id": "collections-label",
+            "label": "Collection Header",
+            "default": "Collections"
         }
     ]
 }
