@@ -1,4 +1,10 @@
-<section class="hero-slider">
+<style>
+    #hero-{{ section.id }} .single-slider {
+        background-image: url({{ section.settings.bg-image | img_url: 'master' }});
+    }
+</style>
+
+<section class="hero-slider" id="hero-{{ section.id }}">
     <div class="single-slider">
         <div class="container">
             <div class="row no-gutters">
@@ -7,11 +13,28 @@
                         <div class="row">
                             <div class="col-lg-7 col-12">
                                 <div class="hero-text">
-                                    <h1><span>UP TO 50% OFF </span>Shirt For Man</h1>
-                                    <p>Maboriosam in a nesciung eget magnae <br> dapibus disting tloctio in the find it pereri <br> odiy maboriosm.</p>
-                                    <div class="button">
-                                        <a href="#" class="btn">Shop Now!</a>
-                                    </div>
+                                    <h1>
+                                        {% if section.settings.sub-title != blank %}
+                                        <span>{{ section.settings.sub-title }}</span>
+                                        {% endif %}
+                                        
+                                        {% if section.settings.title != blank %}
+                                        {{ section.settings.title }}
+                                        {% endif %}
+                                    </h1>
+                                    
+                                    
+                                    {% if section.settings.description != blank %}
+                                        <p>{{section.settings.description}}</p>
+                                    {% endif %}
+                                    
+                                    {% if section.settings.show-button != blank %}
+                                        <div class="button">
+                                            <a href="{{ section.settings.button-url }}" class="btn">
+                                                {{ section.settings.button-text }}
+                                            </a>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -24,7 +47,7 @@
 
 {% schema %}
 {
-    "name": "Hero",
+    "name": "Hero Area",
     "settings": [
         {
             "type": "header",
@@ -34,19 +57,50 @@
             "type": "text",
             "label": "Sub title",
             "id": "sub-title",
-            "default": "UP TO 50% OFF",
+            "default": "UP TO 50% OFF"
         },
         {
             "type": "text",
             "label": "Title",
             "id": "title",
-            "default": "Shirt For Man",
+            "default": "Shirt For Man"
         },
         {
             "type": "textarea",
             "label": "description",
             "id": "description",
-            "default": "Shirt For Man",
+            "default": "Maboriosam in a nesciung eget magnae <br> dapibus disting tloctio in the find it pereri <br> odiy maboriosm."
+        },
+        {
+            "type": "image_picker",
+            "label": "Background Image",
+            "id": "bg-image"
+        },
+        {
+            "type": "header",
+            "content": "Promo Button"
+        },
+        {
+            "type": "checkbox",
+            "label": "Show button",
+            "id": "show-button"
+        },
+        {
+            "type": "text",
+            "label": "Button text",
+            "id": "button-text",
+            "default": "Buy Now"
+        },
+        {
+            "type": "url",
+            "label": "Button Url",
+            "id": "button-url"
+        }
+    ],
+    "presets": [
+        {
+            "category": "Home",
+            "name":"Hero Area"
         }
     ]
 }
