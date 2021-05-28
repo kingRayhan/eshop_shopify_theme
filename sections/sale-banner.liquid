@@ -1,0 +1,99 @@
+<section class="small-banner section">
+    <div class="container-fluid">
+        <div class="row">
+            {% for banner in section.blocks %}
+                <!-- Single Banner  -->
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="single-banner">
+                        <img 
+                            src="{{ banner.settings.bg-image | img_url: '600x370' }}" 
+                            alt="{{ banner.settings.title }}" 
+                        />
+
+                        <div class="content">
+                            {% if banner.settings.sub-title != blank %}
+                                <p>{{ banner.settings.sub-title }}</p>
+                            {% endif %}
+                            
+                            {% if banner.settings.title != blank %}
+                                <h3>{{ banner.settings.title }}</h3>
+                            {% endif %}
+                            
+                            {% if banner.settings.show-button != blank %}
+                                <a href="{{ banner.settings.button-url }}">
+                                    {{ banner.settings.button-text }}
+                                </a>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+                <!-- /End Single Banner  -->
+            {% endfor %}            
+        </div>
+    </div>
+</section>
+
+
+
+{% schema %}
+{
+    "name": "Sale Banner",
+    "blocks": [
+        {
+            "name": "Banner",
+            "type": "Banner",
+            "limit": 3,
+            "settings": [
+                {
+                    "type": "header",
+                    "content": "Contents"
+                },
+                {
+                    "type": "text",
+                    "label": "Sub title",
+                    "id": "sub-title",
+                    "default": "UP TO 50% OFF"
+                },
+                {
+                    "type": "text",
+                    "label": "Title",
+                    "id": "title",
+                    "default": "Shirt For Man"
+                },
+                {
+                    "type": "image_picker",
+                    "label": "Background Image",
+                    "id": "bg-image"
+                },
+                {
+                    "type": "header",
+                    "content": "Promo Button"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Show button",
+                    "id": "show-button"
+                },
+                {
+                    "type": "text",
+                    "label": "Button text",
+                    "id": "button-text",
+                    "default": "Buy Now"
+                },
+                {
+                    "type": "url",
+                    "label": "Button Url",
+                    "id": "button-url"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "category": "Home",
+            "name":"Sale Banner"
+        }
+    ]
+}
+{% endschema %}
